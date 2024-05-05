@@ -8,6 +8,7 @@ stdenv.mkDerivation {
     gcc-arm-embedded-13
     gnumake
     qemu
-    gdbgui
+    gdb
+    clang-tools
   ];
 }
