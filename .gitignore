@@ -1,0 +1,6 @@
+map/
+.gdb*
+bin/*
+obj/*
+!bin/.gitkeep
+!obj/.gitkeep
