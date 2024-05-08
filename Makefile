@@ -6,6 +6,10 @@ GCC = arm-none-eabi-gcc
 LD = arm-none-eabi-ld
 OC = arm-none-eabi-objcopy
 
+## Flags
+CFLAGS ?= -std=gnu99 -Wall -mcpu=cortex-a8
+COPT ?= -O0 # No optimizations
+
 ## List of assembly source files
 PROC_AS_SRC := $(wildcard proc/*.s)
 SYS_AS_SRC := $(wildcard sys/*.s)
@@ -55,7 +59,7 @@ obj/core/%.o: $(CORE_AS_SRC)
 ## Rule to compile assembly files into object files for core
 obj/kernel/%.o: $(KERNEL_C_SRC)
 	mkdir -p obj/kernel
-	$(GCC) -c $< -g -o $@
+	$(GCC) -g $(COPT) $(CFLAGS) -c $< -o $@
 
 DISASM := obj/image.elf
 # Objdump
@@ -72,7 +76,7 @@ nix.debug: obj/image.elf
 	nix-shell --run  'gdb -q \
 	-ex "target remote :2159" \
 	-ex "set logging file ${LOG_FILE}" \
-	-ex "set logging enabled on" \
+	-ex "set logging on" \
 	-ex "list" \
 	$<'
 
@@ -80,7 +84,7 @@ debug: obj/image.elf
 	gdb-multiarch -q \
 	-ex "target remote :2159" \
 	-ex "set logging file ${LOG_FILE}" \
-	-ex "set logging enabled on" \
+	-ex "set logging on" \
 	-ex "l" \
 	$<
 

@@ -4,15 +4,11 @@
 11	    mov r1, #0x10
 12	    bl suma
 13	    b .
-Breakpoint 1 at 0x70010010: file core/suma_abi.s, line 10.
-Breakpoint 2 at 0x7001001c: file core/suma_abi.s, line 13.
+Breakpoint 1 at 0x7001001c: file core/suma_abi.s, line 13.
 Continuing.
 
-Breakpoint 2, _start () at core/suma_abi.s:13
+Breakpoint 1, _start () at core/suma_abi.s:13
 13	    b .
-r6             0x30                48
-Continuing.
-
-Breakpoint 2, _start () at core/suma_abi.s:13
-13	    b .
-r3             0x30                48
+r0             0x30                48 <- output of C function
+r3             0x30                48 <- inside the C function r3 is used
+r6             0x30                48 <- output of asm instruction
