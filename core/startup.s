@@ -1,8 +1,10 @@
-.extern suma
-
 .global _start
-.section .text
+.global __sp
+
+.section .text._start
 _start: 
     ldr sp, =__sp
-    // vector_table
+    mov r0, #0x20
+    mov r1, #0x10
+    add r2, r1, r0 
     b .

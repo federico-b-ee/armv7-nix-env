@@ -26,10 +26,10 @@ CORE_OBJ_FILES := $(patsubst core/%.s, obj/core/%.o, $(CORE_AS_SRC))
 KERNEL_OBJ_FILES := $(patsubst kernel/%.c, obj/kernel/%.o, $(KERNEL_C_SRC))
 ALL_OBJ_FILES := $(PROC_OBJ_FILES) $(SYS_OBJ_FILES) $(CORE_OBJ_FILES) $(KERNEL_OBJ_FILES)
 
-nix.build:
+nix.build: make clean
 	nix-shell --run "make bin/image.bin"
 
-build: bin/image.bin
+build: clean bin/image.bin
 
 ## Rule to create the binary
 bin/image.bin: obj/image.elf
@@ -42,22 +42,22 @@ obj/image.elf: $(ALL_OBJ_FILES)
 	$(LD) -T $(LINKER_SCRIPT) -o $@ $(ALL_OBJ_FILES) -Map map/image.map
 
 ## Rule to compile assembly files into object files for proc
-obj/proc/%.o: $(PROC_AS_SRC)
+obj/proc/%.o: proc/%.s
 	mkdir -p obj/proc
 	$(AS) -c $< -g -o $@ -a > $@.lst
 
 ## Rule to compile assembly files into object files for sys
-obj/sys/%.o: $(SYS_AS_SRC)
+obj/sys/%.o: sys/%.s
 	mkdir -p obj/sys
 	$(AS) -c $< -g -o $@ -a > $@.lst
 
 ## Rule to compile assembly files into object files for core
-obj/core/%.o: $(CORE_AS_SRC)
+obj/core/%.o: core/%.s
 	mkdir -p obj/core
 	$(AS) -c $< -g -o $@ -a > $@.lst
 
 ## Rule to compile assembly files into object files for core
-obj/kernel/%.o: $(KERNEL_C_SRC)
+obj/kernel/%.o: kernel/%.c
 	mkdir -p obj/kernel
 	$(GCC) -g $(COPT) $(CFLAGS) -c $< -o $@
 
