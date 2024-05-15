@@ -70,3 +70,13 @@ To build and run a tagged release:
 
 - [ARMV7 - ASM Quick Reference](https://courses.cs.washington.edu/courses/cse469/20wi/armv7.pdf)
 - [ARM - Programmer's Guide](https://developer.arm.com/documentation/den0013/d)
+
+## Exception Handling
+- [ARM bootloader: Interrupt Vector Table Understanding - Stack Overflow](https://stackoverflow.com/questions/21312963/arm-bootloader-interrupt-vector-table-understanding)
+- [ARM Cortex-A Series Programmer's Guide for ARMv7-A](https://developer.arm.com/documentation/den0013/d/Exception-Handling/Exception-handling)
+- [ARM bootloader: Interrupt Vector Table Understanding - Stack Overflow](https://stackoverflow.com/questions/21312963/arm-bootloader-interrupt-vector-table-understanding)
+- [Guide for ARMv7-A | Excepetion Handling](https://developer.arm.com/documentation/den0013/d/Exception-Handling/Exception-handling)
+- [Guide for ARMv7-A | Booting](https://developer.arm.com/documentation/den0013/d/Boot-Code/Booting-a-bare-metal-system?lang=en)
+- [VectorTable | Allocatable .section](https://stackoverflow.com/a/58713088)
+- [VectorTable | label followed by .word is a function pointer](https://stackoverflow.com/a/18849668)
+- [LiteralPools | ldr](https://stackoverflow.com/a/17215118)
