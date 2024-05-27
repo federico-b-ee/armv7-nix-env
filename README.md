@@ -72,11 +72,17 @@ To build and run a tagged release:
 - [ARM - Programmer's Guide](https://developer.arm.com/documentation/den0013/d)
 
 ## Exception Handling
+
+- [LiteralPools | ldr](https://stackoverflow.com/a/17215118)
+
+### Booting
+- [Guide for ARMv7-A | Booting](https://developer.arm.com/documentation/den0013/d/Boot-Code/Booting-a-bare-metal-system?lang=en)
 - [ARM bootloader: Interrupt Vector Table Understanding - Stack Overflow](https://stackoverflow.com/questions/21312963/arm-bootloader-interrupt-vector-table-understanding)
 - [ARM Cortex-A Series Programmer's Guide for ARMv7-A](https://developer.arm.com/documentation/den0013/d/Exception-Handling/Exception-handling)
 - [ARM bootloader: Interrupt Vector Table Understanding - Stack Overflow](https://stackoverflow.com/questions/21312963/arm-bootloader-interrupt-vector-table-understanding)
 - [Guide for ARMv7-A | Excepetion Handling](https://developer.arm.com/documentation/den0013/d/Exception-Handling/Exception-handling)
-- [Guide for ARMv7-A | Booting](https://developer.arm.com/documentation/den0013/d/Boot-Code/Booting-a-bare-metal-system?lang=en)
 - [VectorTable | Allocatable .section](https://stackoverflow.com/a/58713088)
-- [VectorTable | label followed by .word is a function pointer](https://stackoverflow.com/a/18849668)
-- [LiteralPools | ldr](https://stackoverflow.com/a/17215118)
+- [VectorTable | label followed by .word is a function pointer](https://stackoverflow.com/a/18849668) ???
+- [Stack Pointer Init](https://developer.arm.com/documentation/dui0471/m/embedded-software-development/stack-pointer-initialization)
+- [ARMv7-A PSRs](https://developer.arm.com/documentation/ddi0406/b/System-Level-Architecture/The-System-Level-Programmers--Model/ARM-processor-modes-and-core-registers/Program-Status-Registers--PSRs-)
+- [ARMv7-A Processor Modes](https://developer.arm.com/documentation/den0013/d/ARM-Processor-Modes-and-Registers)

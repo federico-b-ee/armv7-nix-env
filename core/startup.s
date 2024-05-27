@@ -1,5 +1,4 @@
 .global _start
-.global __sp
 
 .section .text._start
 _start: 
@@ -9,7 +8,6 @@ _start:
     ldmia   r0!, {r2-r8}
     stmia   r1!, {r2-r8}
 
-    ldr sp, =__sp
     mov r0, #0x20
     mov r1, #0x10
     add r2, r1, r0 
