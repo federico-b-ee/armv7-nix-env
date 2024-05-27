@@ -1,5 +1,3 @@
-.PHONY: nix.build build nix.objdump objdump nix.debug debug nix.qemuA8 qemuA8 nix.fmt clean help
-
 # Define the compiler
 AS = arm-none-eabi-as
 GCC = arm-none-eabi-gcc
@@ -28,8 +26,10 @@ ALL_OBJ_FILES := $(PROC_OBJ_FILES) $(SYS_OBJ_FILES) $(CORE_OBJ_FILES) $(KERNEL_O
 
 nix.build: make clean
 	nix-shell --run "make bin/image.bin"
+.PHONY: nix.build
 
 build: clean bin/image.bin
+.PHONY: build
 
 ## Rule to create the binary
 bin/image.bin: obj/image.elf
@@ -70,7 +70,7 @@ objdump:
 	arm-none-eabi-objdump -d $(DISASM)
 
 
-LOG_FILE=gdb_session0.log
+LOG_FILE ?= gdb_session0.log
 # Debug
 nix.debug: obj/image.elf
 	nix-shell --run  'gdb -q \
@@ -79,6 +79,7 @@ nix.debug: obj/image.elf
 	-ex "set logging on" \
 	-ex "list" \
 	$<'
+.PHONY: nix.debug
 
 debug: obj/image.elf
 	gdb-multiarch -q \
@@ -87,6 +88,7 @@ debug: obj/image.elf
 	-ex "set logging on" \
 	-ex "l" \
 	$<
+.PHONY: debug
 
 # QEMU
 nix.qemuA8: bin/image.bin
@@ -95,6 +97,7 @@ nix.qemuA8: bin/image.bin
 	-no-reboot -nographic \
 	-monitor telnet:127.0.0.1:1234,server,nowait \
 	-kernel $< -S -gdb tcp::2159"
+.PHONY: nix.qemuA8
 
 qemuA8: bin/image.bin
 	qemu-system-arm \
@@ -102,21 +105,26 @@ qemuA8: bin/image.bin
 	-no-reboot -nographic \
 	-monitor telnet:127.0.0.1:1234,server,nowait \
 	-kernel $< -S -gdb tcp::2159
+.PHONY: qemuA8
 
 # Format
 nix.fmt:
 	nixfmt shell.nix
+.PHONY: nix.fmt
 
 nix.cfmt: $(KERNEL_C_SRC)
 	nix-shell --run "clang-format -i $<"
+.PHONY: nix.cfmt
 
 cfmt: $(KERNEL_C_SRC)
 	clang-format -i $<
+.PHONY: cfmt
 
 # Clean target
 clean:
 	rm -rf obj/*
 	rm -rf bin/*
+.PHONY: clean
 
 # Help target
 help:
@@ -133,3 +141,4 @@ help:
 	@echo "\e[92mcfmt\e[0m          : Format C files using clang-format"
 	@echo "\e[92mnix.cfmt\e[0m      : Format C files using clang-format with nix-shell"
 	@echo "\e[92mclean\e[0m         : Clean up generated files"
+.PHONY: help
