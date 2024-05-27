@@ -1,5 +1,6 @@
 .global _reset_handler
 .extern _start
+.extern _vector_table
 
 .extern __abt_sp
 .extern __irq_sp
@@ -56,6 +57,12 @@ _reset_handler:
     msr     CPSR_c, #(SVC_MODE | I_Bit | F_Bit) // Switch to Supervisor mode
     mov     sp, r0
     // Leave processor in SVC mode
+
+    // Store _vector_table at address 0x0000_0000
+    ldr     r0, =_vector_table
+    mov     r1, #0x0
+    ldmia   r0!, {r2-r8}
+    stmia   r1!, {r2-r8}
 
     cpsie   i          // Enable interrupts
     b _start
