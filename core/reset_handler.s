@@ -1,13 +1,14 @@
 .global _reset_handler
+
 .extern _start
 .extern _vector_table
+.extern _vector_table_end
 
 .extern __abt_sp
 .extern __irq_sp
 .extern __svc_sp
 .extern __sys_sp
 .extern __und_sp
-.extern __usr_sp
 
 .equ USR_MODE,  0b10000
 .equ IRQ_MODE,  0b10010
@@ -46,11 +47,7 @@ _reset_handler:
     ldr     r0, =__und_sp
     msr     CPSR_c, #(UND_MODE | I_Bit | F_Bit) // Switch to Undefined mode
     mov     sp, r0
-
-    // USR mode
-    ldr     r0, =__usr_sp
-    msr     CPSR_c, #(USR_MODE | I_Bit | F_Bit) // Switch to User mode
-    mov     sp, r0
+    mov r2, #(0x01 << 2)
 
     // SVC mode
     ldr     r0, =__svc_sp
@@ -64,7 +61,13 @@ _reset_handler:
     ldmia   r0!, {r2-r8}
     stmia   r1!, {r2-r8}
 
-    cpsie   i          // Enable interrupts
+    // r1 = the last address+0x4
+
+    // Store handler's addresses
+    ldr     r0, =_vector_table_end
+    ldmia   r0!, {r2-r8}
+    stmia   r1!, {r2-r8}
+
     b _start
 
 /*
