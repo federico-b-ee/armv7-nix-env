@@ -112,12 +112,12 @@ nix.fmt:
 	nixfmt shell.nix
 .PHONY: nix.fmt
 
-nix.cfmt: $(KERNEL_C_SRC)
-	nix-shell --run "clang-format -i $<"
+nix.cfmt:
+	nix-shell --run "clang-format -i kernel/*.c"
 .PHONY: nix.cfmt
 
-cfmt: $(KERNEL_C_SRC)
-	clang-format -i $<
+cfmt:
+	clang-format -i kernel/*.c
 .PHONY: cfmt
 
 # Clean target

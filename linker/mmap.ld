@@ -5,18 +5,17 @@ ENTRY(_vector_table)
 _PUBLIC_RAM_INIT        = 0x70010000;
 _STACK_INIT             = 0x70020000;
 
-_USR_STACK_SIZE         = 8K;
+_SYS_STACK_SIZE         = 8K;
 _ABT_STACK_SIZE         = 1K;
 _SVC_STACK_SIZE         = 2K;
 _IRQ_STACK_SIZE         = 1K;
 _UND_STACK_SIZE         = 1K;
-_SYS_STACK_SIZE         = 1K;
 
-_TOTAL_STACK_SIZE       = _USR_STACK_SIZE + _ABT_STACK_SIZE + _SVC_STACK_SIZE + _IRQ_STACK_SIZE + _UND_STACK_SIZE + _SYS_STACK_SIZE;
+_TOTAL_STACK_SIZE       = _ABT_STACK_SIZE + _SVC_STACK_SIZE + _IRQ_STACK_SIZE + _UND_STACK_SIZE + _SYS_STACK_SIZE;
 
 MEMORY {
     PUBLIC_RAM : ORIGIN = _PUBLIC_RAM_INIT, LENGTH = 4K     /* 7001_0000 .. 7001_0FFF */
-    PUBLIC_STACK : ORIGIN = _STACK_INIT, LENGTH = _TOTAL_STACK_SIZE /* 7002_0000 .. 7002_34FF = 14K */
+    PUBLIC_STACK : ORIGIN = _STACK_INIT, LENGTH = _TOTAL_STACK_SIZE /* 7002_0000 .. 7002_33FF = 13K */
 }
 
 /* It starts from the bottom and grows upwards */
@@ -46,11 +45,12 @@ SECTIONS {
     which often require 16-byte alignment for their data.*/
     .stack (NOLOAD) : {
         . = ALIGN(16);
-
         _stack_end = .;
-        . += _USR_STACK_SIZE;
+
+        _sys_stack_end = .;
+        . += _SYS_STACK_SIZE;
         . = ALIGN(16);
-        __usr_sp = .;
+        __sys_sp = .;
 
         _irq_stack_end = .;
         . += _IRQ_STACK_SIZE;
@@ -72,9 +72,6 @@ SECTIONS {
         . = ALIGN(16);
         __und_sp = .;
 
-        _sys_stack_end = .;
-        . += _SYS_STACK_SIZE;
-        . = ALIGN(16);
-        __sys_sp = .;
+        __stack_start = .;
     } > PUBLIC_STACK
 }
