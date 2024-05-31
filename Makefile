@@ -113,7 +113,7 @@ nix.fmt:
 .PHONY: nix.fmt
 
 nix.cfmt:
-	nix-shell --run "clang-format -i kernel/*.c"
+	nix-shell --run "clang-format -i kernel/*.c kernel/inc/*.h"
 .PHONY: nix.cfmt
 
 cfmt:
