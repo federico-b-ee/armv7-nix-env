@@ -117,7 +117,7 @@ nix.cfmt:
 .PHONY: nix.cfmt
 
 cfmt:
-	clang-format -i kernel/*.c
+	clang-format -i kernel/*.c kernel/inc/*.h
 .PHONY: cfmt
 
 # Clean target
