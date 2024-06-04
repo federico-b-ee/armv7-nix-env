@@ -1,4 +1,5 @@
 .global _start
+.extern __gic_init
 
 .section .text._start
 _start: 

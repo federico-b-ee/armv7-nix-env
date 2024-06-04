@@ -13,6 +13,9 @@ PROC_AS_SRC := $(wildcard proc/*.s)
 SYS_AS_SRC := $(wildcard sys/*.s)
 CORE_AS_SRC := $(wildcard core/*.s)
 KERNEL_C_SRC := $(wildcard kernel/*.c)
+KERNEL_RS_SRC := $(wildcard kernel/rs/*.rs)
+
+RS := 0
 
 ## Path to linker script
 LINKER_SCRIPT := linker/mmap.ld
@@ -22,7 +25,16 @@ PROC_OBJ_FILES := $(patsubst proc/%.s, obj/proc/%.o, $(PROC_AS_SRC))
 SYS_OBJ_FILES := $(patsubst sys/%.s, obj/sys/%.o, $(SYS_AS_SRC))
 CORE_OBJ_FILES := $(patsubst core/%.s, obj/core/%.o, $(CORE_AS_SRC))
 KERNEL_OBJ_FILES := $(patsubst kernel/%.c, obj/kernel/%.o, $(KERNEL_C_SRC))
-ALL_OBJ_FILES := $(PROC_OBJ_FILES) $(SYS_OBJ_FILES) $(CORE_OBJ_FILES) $(KERNEL_OBJ_FILES)
+KERNEL_RS_OBJ_FILES := $(patsubst kernel/rs/%.rs, obj/kernel_rs/%.o, $(KERNEL_RS_SRC))
+
+ALL_C_OBJ_FILES := $(PROC_OBJ_FILES) $(SYS_OBJ_FILES) $(CORE_OBJ_FILES) $(KERNEL_OBJ_FILES)
+ALL_RS_OBJ_FILES := $(PROC_OBJ_FILES) $(SYS_OBJ_FILES) $(CORE_OBJ_FILES) $(KERNEL_RS_OBJ_FILES)
+
+ifeq ($(RS), 1)
+	ALL_OBJ_FILES := $(ALL_RS_OBJ_FILES)
+else
+	ALL_OBJ_FILES := $(ALL_C_OBJ_FILES)
+endif
 
 nix.build: make clean
 	nix-shell --run "make bin/image.bin"
@@ -56,10 +68,15 @@ obj/core/%.o: core/%.s
 	mkdir -p obj/core
 	$(AS) -c $< -g -o $@ -a > $@.lst
 
-## Rule to compile assembly files into object files for core
+## Rule to compile C files into object files for kernel
 obj/kernel/%.o: kernel/%.c
 	mkdir -p obj/kernel
 	$(GCC) -g $(COPT) $(CFLAGS) -c $< -o $@
+
+## Rule to compile RS files into object files for kernel
+obj/kernel_rs/%.o: kernel/rs/%.rs
+	mkdir -p obj/kernel_rs
+	rustc -Copt-level=s --emit=obj $< --target=armv7a-none-eabi -o $@
 
 DISASM := obj/image.elf
 # Objdump
