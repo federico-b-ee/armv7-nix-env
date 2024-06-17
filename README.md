@@ -54,6 +54,12 @@ Locally:
 make build
 ```
 
+To compile the `rust` drivers defined by `kernel/rs/drivers.rs` run the make command with the variable RS set to 1:
+
+```sh
+make build RS=1
+```
+
 > [!IMPORTANT]
 > The Makefile contains targets for both the Nix package manager and Ubuntu/Debian packages. The targets starting with `nix.` should be fully functional on any machine that supports the nix-shell environment.
 
@@ -70,19 +76,45 @@ To build and run a tagged release:
 
 - [ARMV7 - ASM Quick Reference](https://courses.cs.washington.edu/courses/cse469/20wi/armv7.pdf)
 - [ARM - Programmer's Guide](https://developer.arm.com/documentation/den0013/d)
+- Machine used by QEMU &rarr; [RealView Platform Baseboard for Cortex-A8 User Guide](https://developer.arm.com/documentation/dui0417/d/programmer-s-reference)
+- Genearal ARMv7 guide &rarr; [baremetal-arm/doc/00\_introduction.md at master · umanovskis/baremetal-arm](https://github.com/umanovskis/baremetal-arm/blob/master/doc/00_introduction.md)
 
 ## Exception Handling
 
 - [LiteralPools | ldr](https://stackoverflow.com/a/17215118)
 
 ### Booting
+- [ARMv7-A PSRs](https://developer.arm.com/documentation/ddi0406/b/System-Level-Architecture/The-System-Level-Programmers--Model/ARM-processor-modes-and-core-registers/Program-Status-Registers--PSRs-)
 - [Guide for ARMv7-A | Booting](https://developer.arm.com/documentation/den0013/d/Boot-Code/Booting-a-bare-metal-system?lang=en)
 - [ARM bootloader: Interrupt Vector Table Understanding - Stack Overflow](https://stackoverflow.com/questions/21312963/arm-bootloader-interrupt-vector-table-understanding)
-- [ARM Cortex-A Series Programmer's Guide for ARMv7-A](https://developer.arm.com/documentation/den0013/d/Exception-Handling/Exception-handling)
-- [ARM bootloader: Interrupt Vector Table Understanding - Stack Overflow](https://stackoverflow.com/questions/21312963/arm-bootloader-interrupt-vector-table-understanding)
-- [Guide for ARMv7-A | Excepetion Handling](https://developer.arm.com/documentation/den0013/d/Exception-Handling/Exception-handling)
 - [VectorTable | Allocatable .section](https://stackoverflow.com/a/58713088)
-- [VectorTable | label followed by .word is a function pointer](https://stackoverflow.com/a/18849668) ???
 - [Stack Pointer Init](https://developer.arm.com/documentation/dui0471/m/embedded-software-development/stack-pointer-initialization)
-- [ARMv7-A PSRs](https://developer.arm.com/documentation/ddi0406/b/System-Level-Architecture/The-System-Level-Programmers--Model/ARM-processor-modes-and-core-registers/Program-Status-Registers--PSRs-)
 - [ARMv7-A Processor Modes](https://developer.arm.com/documentation/den0013/d/ARM-Processor-Modes-and-Registers)
+
+### Exception Handling
+Exceptions take into account the interrupts (`IRQs`): [Guide for ARMv7-A | Types of Exception](https://developer.arm.com/documentation/den0013/d/Exception-Handling/Types-of-exception)
+- [ARM Developer Guide | Handling Exceptions](https://developer.arm.com/documentation/dui0056/d/handling-processor-exceptions)
+- [Guide for ARMv7-A | Exception Handling](https://developer.arm.com/documentation/den0013/d/Exception-Handling/Exception-handling)
+- [Guide for ARMv7-A | Return from exception](https://developer.arm.com/documentation/den0013/d/Exception-Handling/Exception-priorities/The-return-instruction)
+- [Guide for ARMv7-A | Simplistic Interrupt Handling](https://developer.arm.com/documentation/den0013/d/Interrupt-Handling/External-interrupt-requests/Simplistic-interrupt-handling)
+- [Guide for ARMv7-A | Nested Interrupt Handling](https://developer.arm.com/documentation/den0013/d/Interrupt-Handling/External-interrupt-requests/Nested-interrupt-handling)
+
+
+### UART PL011
+- [PrimeCell UART (PL011) Technical Reference Manual r1p5](https://developer.arm.com/documentation/ddi0183/g/programmers-model/summary-of-registers)
+- [ARMs PL011 UART | Welcome to the Mike’s homepage!](https://krinkinmu.github.io/2020/11/29/PL011.html)
+- [Hello world for bare metal ARM using QEMU | Freedom Embedded](https://balau82.wordpress.com/2010/02/28/hello-world-for-bare-metal-arm-using-qemu/)
+- [Emulating ARM PL011 serial ports | Freedom Embedded](https://balau82.wordpress.com/2010/11/30/emulating-arm-pl011-serial-ports/)
+
+
+### GIC
+- [RealView Platform Baseboard for Cortex-A8 User Guide](https://developer.arm.com/documentation/dui0417/d/programmer-s-reference/generic-interrupt-controller--gic/generic-interrupt-controller-registers)
+
+
+### Videos
+
+- [Introduction to Assembly Programming with ARM - Setting up Qemu for ARM - YouTube](https://www.youtube.com/watch?v=WubAuz4hPpY)
+
+### Online Emulator
+
+- [CPUlator ARMv7 System Simulator](https://cpulator.01xz.net/?sys=arm)

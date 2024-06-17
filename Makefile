@@ -13,7 +13,7 @@ PROC_AS_SRC := $(wildcard proc/*.s)
 SYS_AS_SRC := $(wildcard sys/*.s)
 CORE_AS_SRC := $(wildcard core/*.s)
 KERNEL_C_SRC := $(wildcard kernel/*.c)
-KERNEL_RS_SRC := $(wildcard kernel/rs/*.rs)
+KERNEL_RS_SRC := $(wildcard kernel/rs/drivers.rs)
 
 RS := 0
 
@@ -28,15 +28,18 @@ KERNEL_OBJ_FILES := $(patsubst kernel/%.c, obj/kernel/%.o, $(KERNEL_C_SRC))
 KERNEL_RS_OBJ_FILES := $(patsubst kernel/rs/%.rs, obj/kernel_rs/%.o, $(KERNEL_RS_SRC))
 
 ALL_C_OBJ_FILES := $(PROC_OBJ_FILES) $(SYS_OBJ_FILES) $(CORE_OBJ_FILES) $(KERNEL_OBJ_FILES)
-ALL_RS_OBJ_FILES := $(PROC_OBJ_FILES) $(SYS_OBJ_FILES) $(CORE_OBJ_FILES) $(KERNEL_RS_OBJ_FILES)
 
 ifeq ($(RS), 1)
-	ALL_OBJ_FILES := $(ALL_RS_OBJ_FILES)
+	ALL_OBJ_FILES := $(ALL_C_OBJ_FILES) $(KERNEL_RS_OBJ_FILES)
 else
 	ALL_OBJ_FILES := $(ALL_C_OBJ_FILES)
 endif
 
-nix.build: make clean
+all:
+	$(MAKE) build RS=1
+.PHONY: all
+
+nix.build: clean
 	nix-shell --run "make bin/image.bin"
 .PHONY: nix.build
 
@@ -74,7 +77,7 @@ obj/kernel/%.o: kernel/%.c
 	$(GCC) -g $(COPT) $(CFLAGS) -c $< -o $@
 
 ## Rule to compile RS files into object files for kernel
-obj/kernel_rs/%.o: kernel/rs/%.rs
+obj/kernel_rs/drivers.o: kernel/rs/drivers.rs
 	mkdir -p obj/kernel_rs
 	rustc -Copt-level=s --emit=obj $< --target=armv7a-none-eabi -o $@
 
@@ -158,4 +161,5 @@ help:
 	@echo "\e[92mcfmt\e[0m          : Format C files using clang-format"
 	@echo "\e[92mnix.cfmt\e[0m      : Format C files using clang-format with nix-shell"
 	@echo "\e[92mclean\e[0m         : Clean up generated files"
+	@echo "\e[92m<target>\e[0m \e[92mRS=1\e[0m : Compile and link the Rust drivers defined by kernel/rs/drivers.rs"
 .PHONY: help

@@ -1,15 +1,5 @@
 // gic.rs
 
-#![no_std]
-#![no_main]
-
-use core::panic::PanicInfo;
-
-#[panic_handler]
-fn panic(_info: &PanicInfo) -> ! {
-    loop {}
-}
-
 const GICC0_ADDR: u32 = 0x1E000000;
 const GICD0_ADDR: u32 = 0x1E001000;
 
@@ -53,7 +43,7 @@ struct GICD {
 
 #[no_mangle]
 #[link_section = ".text"]
-pub unsafe extern "C" fn __gic_init() {
+pub unsafe extern "C" fn rs_gic_init() {
     let gicc0 = &mut *(GICC0_ADDR as *mut GICC);
     let gicd0 = &mut *(GICD0_ADDR as *mut GICD);
 

@@ -1,7 +1,6 @@
-
 #include "inc/timer.h"
 
-__attribute__((section(".text"))) void __timer_init() {
+__attribute__((section(".text"))) void c_timer_init() {
   _timer_t *const TIMER0 = (_timer_t *)TIMER0_ADDR;
 
   TIMER0->Timer1Load = 0x00010000;
