@@ -1,7 +1,6 @@
-
 #include "inc/gic.h"
 
-__attribute__((section(".text"))) void __gic_init() {
+__attribute__((section(".text"))) void c_gic_init() {
   _gicc_t *const GICC0 = (_gicc_t *)GICC0_ADDR;
   _gicd_t *const GICD0 = (_gicd_t *)GICD0_ADDR;
 

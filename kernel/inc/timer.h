@@ -1,3 +1,6 @@
+#ifndef __TIMER_LIB_H
+#define __TIMER_LIB_H
+
 #include <stddef.h>
 #include <stdint.h>
 
@@ -31,3 +34,5 @@ typedef volatile struct {
   uint32_t PeriphID[4];
   uint32_t PCellID[4];
 } _timer_t;
+
+#endif // __TIMER_LIB_H

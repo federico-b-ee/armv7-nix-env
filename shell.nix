@@ -10,5 +10,10 @@ stdenv.mkDerivation {
     qemu
     gdb
     clang-tools
+    rustup
   ];
+  shellHook = ''
+    rustup default stable
+    rustup target add armv7a-none-eabi
+  '';
 }
