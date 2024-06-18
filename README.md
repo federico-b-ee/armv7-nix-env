@@ -79,8 +79,9 @@ To build and run a tagged release:
 - Machine used by QEMU &rarr; [RealView Platform Baseboard for Cortex-A8 User Guide](https://developer.arm.com/documentation/dui0417/d/programmer-s-reference)
 - Genearal ARMv7 guide &rarr; [baremetal-arm/doc/00\_introduction.md at master · umanovskis/baremetal-arm](https://github.com/umanovskis/baremetal-arm/blob/master/doc/00_introduction.md)
 
-## Exception Handling
+## Extras
 
+- [Guide for ARMv7-A | Registers](https://developer.arm.com/documentation/den0013/d/ARM-Processor-Modes-and-Registers/Registers)
 - [LiteralPools | ldr](https://stackoverflow.com/a/17215118)
 
 ### Booting
@@ -96,6 +97,7 @@ Exceptions take into account the interrupts (`IRQs`): [Guide for ARMv7-A | Types
 - [ARM Developer Guide | Handling Exceptions](https://developer.arm.com/documentation/dui0056/d/handling-processor-exceptions)
 - [Guide for ARMv7-A | Exception Handling](https://developer.arm.com/documentation/den0013/d/Exception-Handling/Exception-handling)
 - [Guide for ARMv7-A | Return from exception](https://developer.arm.com/documentation/den0013/d/Exception-Handling/Exception-priorities/The-return-instruction)
+- [Reference Manual | SVC and](https://developer.arm.com/documentation/ddi0403/d/Application-Level-Architecture/Instruction-Details/Alphabetical-list-of-ARMv7-M-Thumb-instructions/SVC)
 - [Guide for ARMv7-A | Simplistic Interrupt Handling](https://developer.arm.com/documentation/den0013/d/Interrupt-Handling/External-interrupt-requests/Simplistic-interrupt-handling)
 - [Guide for ARMv7-A | Nested Interrupt Handling](https://developer.arm.com/documentation/den0013/d/Interrupt-Handling/External-interrupt-requests/Nested-interrupt-handling)
 
