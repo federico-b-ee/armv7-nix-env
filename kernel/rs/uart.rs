@@ -73,3 +73,33 @@ pub unsafe extern "C" fn rs_putstr(s: *const u8) {
         ptr = ptr.add(1);
     }
 }
+
+#[no_mangle]
+#[link_section = ".text"]
+pub unsafe extern "C" fn rs_putnumber(r: u32) {
+    let mut num = r;
+    let mut buffer = [0u8; 8];
+    let mut i = 0;
+
+    if num == 0 {
+        buffer[i] = b'0';
+        i += 1;
+    } else {
+        while num > 0 && i < 8 {
+            let digit = num % 16;
+            let hex_digit = match digit {
+                0..=9 => (digit as u8) + b'0' as u8,
+                10..=15 => (digit as u8) + b'A' as u8 - 10,
+                _ => unreachable!(),
+            };
+            buffer[i] = hex_digit;
+            i += 1;
+            num /= 16;
+        }
+    }
+
+    while i > 0 {
+        i -= 1;
+        rs_putchar(buffer[i]);
+    }
+}
