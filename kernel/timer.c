@@ -7,5 +7,5 @@ __attribute__((section(".text"))) void c_timer_init() {
   TIMER0->Timer1Ctrl = 0x00000002;
   TIMER0->Timer1Ctrl |= 0x00000040;
   TIMER0->Timer1Ctrl |= 0x00000020;
-  TIMER0->Timer1Ctrl |= 0x00000080;
+  TIMER0->Timer1Ctrl |= CTRL_IRQ_ENABLE;
 }
