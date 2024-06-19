@@ -110,8 +110,14 @@ Exceptions take into account the interrupts (`IRQs`): [Guide for ARMv7-A | Types
 
 
 ### GIC
-- [RealView Platform Baseboard for Cortex-A8 User Guide](https://developer.arm.com/documentation/dui0417/d/programmer-s-reference/generic-interrupt-controller--gic/generic-interrupt-controller-registers)
+- [baremetal-arm/doc/07\_interrupts.md at master · umanovskis/baremetal-arm · GitHub](https://github.com/umanovskis/baremetal-arm/blob/master/doc/07_interrupts.md)
+- [RealView Platform Baseboard for Cortex-A8 User Guide | GIC](https://developer.arm.com/documentation/dui0417/d/programmer-s-reference/generic-interrupt-controller--gic/generic-interrupt-controller-registers)
+  - Important: Interrupt Acknowledge &rarr; has the irq number
+- [RealView Platform Baseboard for Cortex-A8 User Guide | IRQs IDs](https://developer.arm.com/documentation/dui0417/d/programmer-s-reference/generic-interrupt-controller--gic/interrupt-signals)
+  - TIMER0 ID: 36
 
+### TIMER
+- [ARM Dual-Timer Module (SP804) Technical Reference Manual r1p0](https://developer.arm.com/documentation/ddi0271/d/programmer-s-model/summary-of-registers)
 
 ### Videos
 

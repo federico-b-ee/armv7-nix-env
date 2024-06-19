@@ -4,6 +4,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#define CTRL_IRQ_ENABLE (1 << 7u)
+
 #define reserved_bits(x, y, z) uint8_t reserved##x[z - y + 1];
 
 #define TIMER0_ADDR 0x10011000
