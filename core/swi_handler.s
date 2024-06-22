@@ -1,7 +1,9 @@
 .global _swi_handler
 .section .text._swi_handler
 
-.extern rs_putstr
+.extern c_puts
+.extern c_putchar
+.extern c_puts_hex
 
 # Following:
 # - https://developer.arm.com/documentation/den0013/d/Interrupt-Handling/External-interrupt-requests/Simplistic-interrupt-handling
@@ -14,7 +16,7 @@ _swi_handler:
     // The lr is later used to link back to this handler after the rs_putstr call
 
     ldr r0, =msg
-    ldr r10, =rs_putstr
+    ldr r10, =c_puts
     blx r10
 
     # Get the svc <imm> number
@@ -24,11 +26,11 @@ _swi_handler:
     ldr r2, =#0xFFFFFF
     and r0, r0, r2
 
-    ldr r10, =rs_putnumber
+    ldr r10, =c_puts_hex
     blx r10
 
     mov r0, #'\n'
-    ldr r10, =rs_putchar
+    ldr r10, =c_putchar
     blx r10
 
     pop {r0-r5, ip, lr}

@@ -1,10 +1,8 @@
 .global _start
 .extern c_gic_init
 .extern c_timer_init
-.extern rs_putchar
-.extern rs_putstr
-.extern rs_UART0_init
-.extern rs_putnumber
+.extern c_puts
+.extern c_putsln
 
 .section .text._start
 _start: 
@@ -27,11 +25,11 @@ _start:
 
     // Seems that the initialization is not necessary
     // Init UART
-    //ldr r10, =rs_UART0_init
+    //ldr r10, =UART0_init
     //mov lr, pc
     //bx r10
     ldr r0, =init_msg
-    ldr r10, =rs_putstr
+    ldr r10, =c_puts
     blx r10
 
 _idle:
