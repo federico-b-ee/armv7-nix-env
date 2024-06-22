@@ -27,7 +27,7 @@ struct UART {
 
 #[no_mangle]
 #[link_section = ".text"]
-pub unsafe extern "C" fn __rs_UART0_init() {
+pub unsafe extern "C" fn rs_UART0_init() {
     let uart0 = &mut *(UART0_ADDR as *mut UART);
 
     // Disable UART0.
@@ -66,7 +66,7 @@ pub unsafe extern "C" fn rs_putchar(c: u8) {
 
 #[no_mangle]
 #[link_section = ".text"]
-pub unsafe extern "C" fn rs_putstr(s: *const u8) {
+pub unsafe extern "C" fn rs_puts(s: *const u8) {
     let mut ptr = s;
     while *ptr != 0 {
         rs_putchar(*ptr);
@@ -76,7 +76,7 @@ pub unsafe extern "C" fn rs_putstr(s: *const u8) {
 
 #[no_mangle]
 #[link_section = ".text"]
-pub unsafe extern "C" fn rs_putnumber(r: u32) {
+pub unsafe extern "C" fn rs_puts_hex(r: u32) {
     let mut num = r;
     let mut buffer = [0u8; 8];
     let mut i = 0;
@@ -98,6 +98,7 @@ pub unsafe extern "C" fn rs_putnumber(r: u32) {
         }
     }
 
+    rs_putchar("0x0");
     while i > 0 {
         i -= 1;
         rs_putchar(buffer[i]);

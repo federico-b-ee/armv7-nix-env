@@ -1,4 +1,9 @@
 .global _irq_handler
+
+.extern c_puts
+.extern c_putchar
+.extern c_puts_hex
+
 .section .text._irq_handler
 
 # Following:
@@ -16,15 +21,15 @@ _irq_handler:
     mov r5, r0
 
     ldr r0, =msg
-    ldr r10, =rs_putstr
+    ldr r10, =c_puts
     blx r10
     // Get the output of c_irq_handler
     mov r0, r5
-    ldr r10, =rs_putnumber
+    ldr r10, =c_puts_hex
     blx r10
 
     mov r0, #'\n'
-    ldr r10, =rs_putchar
+    ldr r10, =c_putchar
     blx r10
 
     pop {r7, r8}
