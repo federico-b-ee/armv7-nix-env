@@ -18,19 +18,6 @@ _irq_handler:
 
     mov r0, sp
     bl c_irq_handler
-    mov r5, r0
-
-    ldr r0, =msg
-    ldr r10, =c_puts
-    blx r10
-    // Get the output of c_irq_handler
-    mov r0, r5
-    ldr r10, =c_puts_hex
-    blx r10
-
-    mov r0, #'\n'
-    ldr r10, =c_putchar
-    blx r10
 
     pop {r7, r8}
     mov sp, r7
