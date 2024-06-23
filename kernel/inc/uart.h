@@ -12,16 +12,24 @@
 #define FR_TXFF (1 << 5u)
 
 typedef struct {
-    uint32_t DR;
-    uint32_t RSRECR;
-    uint32_t RESERVED0[4];
-    uint32_t FR;
-    uint32_t RESERVED1;
-    uint32_t ILPR;
-    uint32_t IBRD;
-    uint32_t FBRD;
-    uint32_t LCRH;
-    uint32_t CR;
+  uint32_t DR;
+  uint32_t RSRECR;
+  uint32_t RESERVED0[4];
+  uint32_t FR;
+  uint32_t RESERVED1;
+  uint32_t ILPR;
+  uint32_t IBRD;
+  uint32_t FBRD;
+  uint32_t LCRH;
+  uint32_t CR;
 } _uart_t;
+
+// Function Definitions
+
+void c__UART0_init();
+void c_putchar(char c);
+void c_puts(const char *s);
+void c_putsln(const char *s);
+void c_puts_hex(uint32_t val);
 
 #endif // __UART_LIB_H

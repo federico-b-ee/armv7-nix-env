@@ -3,6 +3,8 @@
 .extern c_timer_init
 .extern c_puts
 .extern c_putsln
+.extern c_predefined_tasks_init
+.extern c_sched_run
 
 .section .text._start
 _start: 
@@ -32,6 +34,15 @@ _start:
     ldr r10, =c_puts
     blx r10
 
+    // Add tasks
+    ldr r10, =c_predefined_tasks_init
+    blx r10
+
+    // Run scheduler
+    ldr r10, =c_sched_run
+    blx r10
+
+// Should never reach here
 _idle:
     wfi
     b _idle
