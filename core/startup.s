@@ -1,14 +1,21 @@
 .global _start
 .extern c_gic_init
-.extern rs_putchar
-.extern rs_putstr
-.extern rs_UART0_init
+.extern c_timer_init
+.extern c_puts
+.extern c_putsln
+.extern c_predefined_tasks_init
+.extern c_sched_run
 
 .section .text._start
 _start: 
     // Init GIC
     ldr r10, =c_gic_init
     blx r10
+
+    // Init TIMER
+    ldr r10, =c_timer_init
+    blx r10
+
     // The IRQ is enabled on low, thats why bic instr is used
     //mrs r0, cpsr
     //bic r0, r0, 0x80
@@ -20,27 +27,26 @@ _start:
 
     // Seems that the initialization is not necessary
     // Init UART
-    //ldr r10, =rs_UART0_init
+    //ldr r10, =UART0_init
     //mov lr, pc
     //bx r10
-    ldr r0, =msg
-    ldr r10, =rs_putstr
+    ldr r0, =init_msg
+    ldr r10, =c_puts
     blx r10
 
-    mov r0, #64
-_put:
-    add r0, r0, #0x1
-    ldr r10, =rs_putchar
+    // Add tasks
+    ldr r10, =c_predefined_tasks_init
     blx r10
-    b _put
 
-    swi #90
+    // Run scheduler
+    ldr r10, =c_sched_run
+    blx r10
 
-
+// Should never reach here
 _idle:
     wfi
     b _idle
 
 .section .data
-msg:
-    .asciz "UART0:\n"
+init_msg:
+    .asciz "ARMv7 init, using UART0:\n"

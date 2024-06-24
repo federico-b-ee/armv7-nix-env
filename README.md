@@ -79,8 +79,9 @@ To build and run a tagged release:
 - Machine used by QEMU &rarr; [RealView Platform Baseboard for Cortex-A8 User Guide](https://developer.arm.com/documentation/dui0417/d/programmer-s-reference)
 - Genearal ARMv7 guide &rarr; [baremetal-arm/doc/00\_introduction.md at master · umanovskis/baremetal-arm](https://github.com/umanovskis/baremetal-arm/blob/master/doc/00_introduction.md)
 
-## Exception Handling
+## Extras
 
+- [Guide for ARMv7-A | Registers](https://developer.arm.com/documentation/den0013/d/ARM-Processor-Modes-and-Registers/Registers)
 - [LiteralPools | ldr](https://stackoverflow.com/a/17215118)
 
 ### Booting
@@ -96,6 +97,7 @@ Exceptions take into account the interrupts (`IRQs`): [Guide for ARMv7-A | Types
 - [ARM Developer Guide | Handling Exceptions](https://developer.arm.com/documentation/dui0056/d/handling-processor-exceptions)
 - [Guide for ARMv7-A | Exception Handling](https://developer.arm.com/documentation/den0013/d/Exception-Handling/Exception-handling)
 - [Guide for ARMv7-A | Return from exception](https://developer.arm.com/documentation/den0013/d/Exception-Handling/Exception-priorities/The-return-instruction)
+- [Reference Manual | SVC and](https://developer.arm.com/documentation/ddi0403/d/Application-Level-Architecture/Instruction-Details/Alphabetical-list-of-ARMv7-M-Thumb-instructions/SVC)
 - [Guide for ARMv7-A | Simplistic Interrupt Handling](https://developer.arm.com/documentation/den0013/d/Interrupt-Handling/External-interrupt-requests/Simplistic-interrupt-handling)
 - [Guide for ARMv7-A | Nested Interrupt Handling](https://developer.arm.com/documentation/den0013/d/Interrupt-Handling/External-interrupt-requests/Nested-interrupt-handling)
 
@@ -108,8 +110,14 @@ Exceptions take into account the interrupts (`IRQs`): [Guide for ARMv7-A | Types
 
 
 ### GIC
-- [RealView Platform Baseboard for Cortex-A8 User Guide](https://developer.arm.com/documentation/dui0417/d/programmer-s-reference/generic-interrupt-controller--gic/generic-interrupt-controller-registers)
+- [baremetal-arm/doc/07\_interrupts.md at master · umanovskis/baremetal-arm · GitHub](https://github.com/umanovskis/baremetal-arm/blob/master/doc/07_interrupts.md)
+- [RealView Platform Baseboard for Cortex-A8 User Guide | GIC](https://developer.arm.com/documentation/dui0417/d/programmer-s-reference/generic-interrupt-controller--gic/generic-interrupt-controller-registers)
+  - Important: Interrupt Acknowledge &rarr; has the irq number
+- [RealView Platform Baseboard for Cortex-A8 User Guide | IRQs IDs](https://developer.arm.com/documentation/dui0417/d/programmer-s-reference/generic-interrupt-controller--gic/interrupt-signals)
+  - TIMER0 ID: 36
 
+### TIMER
+- [ARM Dual-Timer Module (SP804) Technical Reference Manual r1p0](https://developer.arm.com/documentation/ddi0271/d/programmer-s-model/summary-of-registers)
 
 ### Videos
 
