@@ -4,6 +4,13 @@
 #include <stdint.h>
 
 typedef uint32_t _systick_t;
+typedef struct {
+  uint32_t *sp;
+  uint32_t spsr;
+  uint32_t registers[13];
+  uint32_t *lr;
+} _ctx_t;
+
 
 // Function Definitions
 void c_systick_handler();
@@ -13,8 +20,12 @@ void c_delay(_systick_t ticks);
 // Task Definitions
 
 typedef void (*_task_ptr_t)(void);
+typedef uint8_t _task_id_t;
 
 typedef struct {
+  uint32_t *sp;
+  uint32_t *irq_sp;
+  _task_id_t id;
   _task_ptr_t entrypoint;
   _systick_t ticks;
   _systick_t last_run;
@@ -27,5 +38,5 @@ typedef struct {
 void c_task_init(_task_ptr_t entrypoint, _systick_t ticks);
 void c_predefined_tasks_init(void);
 void c_sched_run(void);
-
+uint32_t c_scheduler(_ctx_t*);
 #endif

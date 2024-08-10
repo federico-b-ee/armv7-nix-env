@@ -13,9 +13,13 @@ _UND_STACK_SIZE         = 1K;
 
 _TOTAL_STACK_SIZE       = _ABT_STACK_SIZE + _SVC_STACK_SIZE + _IRQ_STACK_SIZE + _UND_STACK_SIZE + _SYS_STACK_SIZE;
 
+_TASK_STACK_SIZE        = 1K;
+
+_TOTAL_STACK_SIZE       = _TOTAL_STACK_SIZE + 8 * _TASK_STACK_SIZE;
+
 MEMORY {
     PUBLIC_RAM : ORIGIN = _PUBLIC_RAM_INIT, LENGTH = 4K     /* 7001_0000 .. 7001_0FFF */
-    PUBLIC_STACK : ORIGIN = _STACK_INIT, LENGTH = _TOTAL_STACK_SIZE /* 7002_0000 .. 7002_33FF = 13K */
+    PUBLIC_STACK : ORIGIN = _STACK_INIT, LENGTH = _TOTAL_STACK_SIZE /* 21K */
 }
 
 /* It starts from the bottom and grows upwards */
@@ -71,6 +75,47 @@ SECTIONS {
         . += _UND_STACK_SIZE;
         . = ALIGN(16);
         __und_sp = .;
+
+        _task0_end = .;
+        . += _TASK_STACK_SIZE;
+        . = ALIGN(16);
+        __task0_sp = .;
+
+        _task1_end = .;
+        . += _TASK_STACK_SIZE;
+        . = ALIGN(16);
+        __task1_sp = .;
+
+        _task2_end = .;
+        . += _TASK_STACK_SIZE;
+        . = ALIGN(16);
+        __task2_sp = .;
+
+        _task3_end = .;
+        . += _TASK_STACK_SIZE;
+        . = ALIGN(16);
+        __task3_sp = .;
+
+        /* IRQ_SP for tasks */
+        _task0_irq_end = .;
+        . += _TASK_STACK_SIZE;
+        . = ALIGN(16);
+        __task0_irq_sp = .;
+
+        _task1_irq_end = .;
+        . += _TASK_STACK_SIZE;
+        . = ALIGN(16);
+        __task1_irq_sp = .;
+
+        _task2_irq_end = .;
+        . += _TASK_STACK_SIZE;
+        . = ALIGN(16);
+        __task2_irq_sp = .;
+
+        _task3_irq_end = .;
+        . += _TASK_STACK_SIZE;
+        . = ALIGN(16);
+        __task3_irq_sp = .;
 
         __stack_start = .;
     } > PUBLIC_STACK
