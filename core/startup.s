@@ -4,7 +4,6 @@
 .extern c_puts
 .extern c_putsln
 .extern c_predefined_tasks_init
-.extern c_sched_run
 
 .section .text._start
 _start: 
@@ -38,11 +37,11 @@ _start:
     ldr r10, =c_predefined_tasks_init
     blx r10
 
-    // Run scheduler
-    ldr r10, =c_sched_run
+    // Should never reach here
+    ldr r0, =no_reach_msg
+    ldr r10, =c_puts
     blx r10
 
-// Should never reach here
 _idle:
     wfi
     b _idle
@@ -50,3 +49,6 @@ _idle:
 .section .data
 init_msg:
     .asciz "ARMv7 init, using UART0:\n"
+
+no_reach_msg:
+    .asciz "Should never reach here\n"

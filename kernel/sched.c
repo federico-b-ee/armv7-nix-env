@@ -38,8 +38,8 @@ __attribute__((section(".text"))) void c_task_init(_task_ptr_t entrypoint,
   if (task_index < MAX_TASKS) {
     tasks[task_index].id = task_index;
     tasks[task_index].entrypoint = entrypoint;
-    tasks[task_index].ticks = ticks;
-    tasks[task_index].last_run = 0;
+    tasks[task_index].task_ticks = ticks;
+    tasks[task_index].current_ticks = 0u;
     /* Set stack pointer for task */
     tasks[task_index].sp = task_sp[task_index];
     /* Set IRQ stack pointer for task */
@@ -49,30 +49,59 @@ __attribute__((section(".text"))) void c_task_init(_task_ptr_t entrypoint,
 }
 
 __attribute__((section(".text"))) void c_predefined_tasks_init(void) {
-  c_task_init(task_idle, 5);
-  c_task_init(task1, 8);
-  c_task_init(task2, 12);
-  c_task_init(task3, 5);
+  c_task_init(task_idle, 5u);
+  c_task_init(task1, 8u);
+  c_task_init(task2, 12u);
+  c_task_init(task3, 5u);
+  current_task = &tasks[0];
+  current_task->entrypoint();
 }
 
 __attribute__((section(".text"))) uint32_t c_scheduler(_ctx_t *ctx) {
-  c_puts("Scheduler\n");
-  c_puts_hex(ctx->sp);
-  return 0;
-}
-
-__attribute__((section(".text"))) void c_sched_run(void) {
-  while (1) {
-    for (int i = 0; i < MAX_TASKS; i++) {
-      _task_t *task = &tasks[i];
-      if (task->entrypoint == NULL) {
-        continue;
-      }
-      _systick_t now = c_systick_get();
-      if (now - task->last_run >= tasks->ticks) {
-        task->last_run = now;
-        task->entrypoint();
-      }
+  c_puts_hex(current_task->current_ticks);
+  c_puts("\n");
+  current_task->current_ticks++;
+  if (current_task->current_ticks >= current_task->task_ticks) {
+    // Context Switch -- Push tasks' state
+    // Assuming the stack has a context struct
+    // TODO! revise this
+    uint32_t *task_stack = current_task->sp;
+    for (int i = 0; i < 13; i++) {
+      // Save registers
+      task_stack[i] = ctx->registers[i];
     }
+    // Save SP
+    task_stack[13] = ctx->sp;
+    // Save SPSR
+    task_stack[14] = ctx->spsr;
+    // Save LR
+    task_stack[15] = ctx->lr;
+    // Set counter to zero
+    current_task->current_ticks = 0;
+
+    // Change the task_id by 1 and wrap around
+    uint8_t id = current_task->id;
+    id++;
+    id %= MAX_TASKS;
+    // Set the current task to the new task_id
+    current_task = &tasks[id];
+
+    // Context Switch -- Pop tasks' state
+    uint32_t *next_task_stack = current_task->sp;
+    for (int i = 0; i < 13; i++) {
+      // Restore registers
+      ctx->registers[i] = next_task_stack[i];
+    }
+    // Restore SP
+    ctx->sp = next_task_stack[13];
+    // Restore SPSR
+    ctx->spsr = next_task_stack[14];
+    // Restore LR
+    ctx->lr = next_task_stack[15];
+    current_task->entrypoint();
+    c_puts("BEG -- Task Switch\n");
+    c_puts_hex(current_task->id);
+    c_puts("\nEND -- Task Switch\n");
   }
+  return 0;
 }

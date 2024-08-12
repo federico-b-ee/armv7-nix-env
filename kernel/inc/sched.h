@@ -11,7 +11,6 @@ typedef struct {
   uint32_t *lr;
 } _ctx_t;
 
-
 // Function Definitions
 void c_systick_handler();
 _systick_t c_systick_get();
@@ -27,8 +26,8 @@ typedef struct {
   uint32_t *irq_sp;
   _task_id_t id;
   _task_ptr_t entrypoint;
-  _systick_t ticks;
-  _systick_t last_run;
+  _systick_t task_ticks;
+  _systick_t current_ticks;
 } _task_t;
 
 #define MAX_TASKS 4u
@@ -37,6 +36,5 @@ typedef struct {
 
 void c_task_init(_task_ptr_t entrypoint, _systick_t ticks);
 void c_predefined_tasks_init(void);
-void c_sched_run(void);
-uint32_t c_scheduler(_ctx_t*);
+uint32_t c_scheduler(_ctx_t *);
 #endif

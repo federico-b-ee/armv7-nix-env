@@ -77,16 +77,16 @@ To build and run a tagged release:
 flowchart TD
     A["HANDLER IRQ ASM"] --> B["HANDLER IRQ C (load irq_sp)"]
     B --> C["scheduler"]
-    C --> D{"task.current_ticks < task.ticks"}
-    D -- Yes --> C
-    D -- No --> E["Task Switch"]
+    C --> D{"task.current_ticks >= task.ticks"}
+    D -- No --> A
+    D -- Yes --> E["Task Switch"]
     E --> F["save irq_sp that comes from _ctx_t"]
     F --> G["change to SVC_mode"]
     G --> H["save SVC_sp of the current task"]
     H --> I["load the sp of the new task"]
     I --> J["change to IRQ_mode"]
     J --> K["load the irq_sp of the new task"]
-    K --> C
+    K --> A
 ```
 
 
