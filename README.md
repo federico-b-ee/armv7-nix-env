@@ -1,10 +1,12 @@
-# Why And What
+<h1 align="center">ARMv7 Baremetal</h1>
+
+# Why and What
 
 This project is focused on booting an ARMv7 processor using QEMU and GDB, primarily for educational purposes. The implementation combines both assembly language and C, allowing for a deep understanding of low-level programming and system architecture. However, there are small functions written in Rust, which aim to explore the feasibility of replacing C with Rust in certain parts of the project by utilizing the linker. This approach not only highlights the potential of Rust as a systems programming language but also provides an opportunity to compare its performance and safety features against the traditional C components.
 
 ## Table of Contents
 
-- [Why And What](#why-and-what)
+- [Why and What](#why-and-what)
   - [Table of Contents](#table-of-contents)
 - [Dependencies](#dependencies)
 - [How](#how)
@@ -86,13 +88,7 @@ To build and run a tagged release:
 
 The scheduler works on top of the Timer interruptions, utilizing a straightforward algorithm designed for educational purposes. When a task is running, it continuously checks for timer interruptions. Upon receiving a timer interrupt, the system invokes the irq_handler.s, which then calls the c_irq_handler function, passing the current task's context as an argument (a pointer to the stack). The c_scheduler function is then executed to determine whether the current task has exceeded its allocated time slice, indicated by comparing current_task.current_ticks with current_task.task_ticks. If the task has not yet reached its time limit, the system returns to the interrupt handler to continue execution. However, if the time limit is reached, the scheduler performs context switching. This involves saving the current task's interrupt stack pointer (irq_sp) from the assembly context, switching to Supervisor (SVC) mode, and saving the SVC stack pointer of the current task. The scheduler then loads the SVC stack pointer of the next task to be executed, switches back to IRQ mode, and finally loads the interrupt stack pointer of the new task. This cycle repeats, ensuring efficient multitasking and responsive task management on the ARMv7 architecture. 
 
-<style>
-div.mermaid {
-    text-align: center;
-}
-</style>
-
-<div class="mermaid">
+<div style="text-align: center">
 
 ```mermaid
 flowchart TD
