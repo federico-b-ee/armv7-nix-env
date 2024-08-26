@@ -13,9 +13,13 @@ _UND_STACK_SIZE         = 1K;
 
 _TOTAL_STACK_SIZE       = _ABT_STACK_SIZE + _SVC_STACK_SIZE + _IRQ_STACK_SIZE + _UND_STACK_SIZE + _SYS_STACK_SIZE;
 
+_TASK_STACK_SIZE        = 1K;
+
+_TOTAL_STACK_SIZE       = _TOTAL_STACK_SIZE + 8 * _TASK_STACK_SIZE;
+
 MEMORY {
-    PUBLIC_RAM : ORIGIN = _PUBLIC_RAM_INIT, LENGTH = 4K     /* 7001_0000 .. 7001_0FFF */
-    PUBLIC_STACK : ORIGIN = _STACK_INIT, LENGTH = _TOTAL_STACK_SIZE /* 7002_0000 .. 7002_33FF = 13K */
+    PUBLIC_RAM : ORIGIN = _PUBLIC_RAM_INIT, LENGTH = 16K
+    PUBLIC_STACK : ORIGIN = _STACK_INIT, LENGTH = _TOTAL_STACK_SIZE /* 21K */
 }
 
 /* It starts from the bottom and grows upwards */
@@ -47,30 +51,85 @@ SECTIONS {
         . = ALIGN(16);
         _stack_end = .;
 
+        /* 0x70020000 */
         _sys_stack_end = .;
         . += _SYS_STACK_SIZE;
         . = ALIGN(16);
         __sys_sp = .;
+        /* 0x70022000 */
 
         _irq_stack_end = .;
         . += _IRQ_STACK_SIZE;
         . = ALIGN(16);
         __irq_sp = .;
+        /* 0x70022400 */
 
         _svc_stack_end = .;
         . += _SVC_STACK_SIZE;
         . = ALIGN(16);
         __svc_sp = .;
+        /* 0x70022C00 */
 
         _abt_stack_end = .;
         . += _ABT_STACK_SIZE;
         . = ALIGN(16);
         __abt_sp = .;
+        /* 0x7002300 */
 
         _und_stack_end = .;
         . += _UND_STACK_SIZE;
         . = ALIGN(16);
         __und_sp = .;
+        /* 0x70023400 */
+
+        _task0_end = .;
+        . += _TASK_STACK_SIZE;
+        . = ALIGN(16);
+        __task0_sp = .;
+        /* 0x70023800 */
+
+        _task1_end = .;
+        . += _TASK_STACK_SIZE;
+        . = ALIGN(16);
+        __task1_sp = .;
+        /* 0x70023C00 */
+
+        _task2_end = .;
+        . += _TASK_STACK_SIZE;
+        . = ALIGN(16);
+        __task2_sp = .;
+        /* 0x70024000 */
+
+        _task3_end = .;
+        . += _TASK_STACK_SIZE;
+        . = ALIGN(16);
+        __task3_sp = .;
+        /* 0x70024400 */
+
+        /* IRQ_SP for tasks */
+        _task0_irq_end = .;
+        . += _TASK_STACK_SIZE;
+        . = ALIGN(16);
+        __task0_irq_sp = .;
+        /* 0x70024800 */
+
+        _task1_irq_end = .;
+        . += _TASK_STACK_SIZE;
+        . = ALIGN(16);
+        __task1_irq_sp = .;
+        /* 0x70024C00 */
+
+        _task2_irq_end = .;
+        . += _TASK_STACK_SIZE;
+        . = ALIGN(16);
+        __task2_irq_sp = .;
+        /* 0x70025000 */
+
+        _task3_irq_end = .;
+        . += _TASK_STACK_SIZE;
+        . = ALIGN(16);
+        __task3_irq_sp = .;
+        /* 0x70025400 */
 
         __stack_start = .;
     } > PUBLIC_STACK

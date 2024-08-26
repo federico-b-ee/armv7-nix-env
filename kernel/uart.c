@@ -11,8 +11,9 @@ __attribute__((section(".text"))) void c__UART0_init() {
   // Set baud rate to 115200:
   // PrimeCell® UART (PL011) Technical Reference Manual Page 56 // 3-10
   // Baud Rate Divisor = (24E6)/(16×115200) = 13.0208333
-  // This means BRDI = 13 and BRD F = 0.020833.
-  // Therefore, fractional part, m = integer((0.020833×64)+0.5) = int(1.833) = 1
+  // This means IBRD = 13 and m = 0.020833.
+  // Therefore, the fractional part is, FBRD = integer((0.020833×64)+0.5) =
+  // int(1.833) = 1
 
   UART0->IBRD = 13;
   UART0->FBRD = 1;

@@ -97,6 +97,7 @@ nix.debug: obj/image.elf
 	-ex "target remote :2159" \
 	-ex "set logging file ${LOG_FILE}" \
 	-ex "set logging on" \
+	-ex "set print pretty on" \
 	-ex "list" \
 	$<'
 .PHONY: nix.debug

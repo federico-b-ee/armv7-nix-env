@@ -1,28 +1,41 @@
-# What and Why Nix?
+# Why And What
 
-Nix is a powerful package manager for Linux and other Unix systems that makes package management reliable and reproducible. It aims to provide a robust and simple way to handle packages and their dependencies, ensuring that the same package setup can be replicated across multiple environments without any inconsistencies.
+This project is focused on booting an ARMv7 processor using QEMU and GDB, primarily for educational purposes. The implementation combines both assembly language and C, allowing for a deep understanding of low-level programming and system architecture. However, there are small functions written in Rust, which aim to explore the feasibility of replacing C with Rust in certain parts of the project by utilizing the linker. This approach not only highlights the potential of Rust as a systems programming language but also provides an opportunity to compare its performance and safety features against the traditional C components.
 
-The key features of Nix are:
+## Table of Contents
 
-1. **Reproducibility:** Nix ensures that installing or upgrading one package cannot break other packages. It allows multiple versions of a package to coexist on the same system.
+- [Why And What](#why-and-what)
+  - [Table of Contents](#table-of-contents)
+- [Dependencies](#dependencies)
+- [How](#how)
+- [Scheduling](#scheduling)
+  - [Resources](#resources)
+- [What and Why Nix?](#what-and-why-nix)
+- [References](#references)
+  - [Extras](#extras)
+    - [Booting](#booting)
+    - [Exception Handling](#exception-handling)
+    - [UART PL011](#uart-pl011)
+    - [GIC](#gic)
+    - [TIMER](#timer)
+    - [Videos](#videos)
+    - [Online Emulator](#online-emulator)
+    - [GDB extras](#gdb-extras)
 
-2. **Isolation:** Nix isolates packages from each other. This means that unlike traditional package managers, it doesn't have global state that can be mutated by packages.
+# Dependencies
 
-These features make Nix an excellent tool for creating reproducible development environments, reducing the "it works on my machine" problem.
+Ubuntu/Debian packages:
+- gcc-arm-none-eabi
+- gdb-arm-none-eabi
+- qemu-system
 
-- [Nix Tutorial](https://nix.dev/tutorials/)
-- [A step towards the future of configuration and infrastructure management with Nix](https://blog.container-solutions.com/step-towards-future-configuration-infrastructure-management-nix)
-- [Is there much difference between using nix-shell and docker for local development? - Help - NixOS Discourse](https://discourse.nixos.org/t/is-there-much-difference-between-using-nix-shell-and-docker-for-local-development/807)
-- [What is /usr/bin/env?](https://stackoverflow.com/questions/43793040/how-does-usr-bin-env-work-in-a-linux-shebang-line)
-- [Nix + Make](https://www.reddit.com/r/NixOS/comments/8hefx5/nixshell_as_interpreter_for_a_makefile/)
-
-## Dependencies
+Or
 
 Nix(package manager):
 - [nix](https://nixos.org/download/) &rarr; installs `nix-shell`
 - [nixfmt](https://github.com/NixOS/nixfmt) (optional)
 
-# How to build images?
+# How
 
 Project's sructure:
 
@@ -40,7 +53,7 @@ Project's sructure:
 └── sys             <- Assembly files used to handle the syscalls
 ```
 
-To build the project and assemble/compile files located at `core/*.s`/`sys/*.s`/`proc/*.s`  and `kernel/*.c`run:
+To build the project and assemble/compile files located at `core/*.s`/`sys/*.s`/`proc/*.s` and `kernel/*.c` run:
 
 Using `nix-shell`:
 
@@ -63,14 +76,71 @@ make build RS=1
 > [!IMPORTANT]
 > The Makefile contains targets for both the Nix package manager and Ubuntu/Debian packages. The targets starting with `nix.` should be fully functional on any machine that supports the nix-shell environment.
 
-Within the `test_logs` folder, you'll find gdb session logs showing the output of the **tagged** git state. For example, if the tag is `tag0`, the `test_logs/gdb_session0.log` file shows the gdb session for that tag's state.
-
 To build and run a tagged release:
 1. Check out the desired tag using the command `git checkout tags/<tag_name>`.
 2. Execute `make build` to build the project.
 3. Run `make qemuA8` to execute the project on QEMU.
 4. Open a new terminal and run `make debug` to debug the project.
 
+# Scheduling
+
+The scheduler works on top of the Timer interruptions, utilizing a straightforward algorithm designed for educational purposes. When a task is running, it continuously checks for timer interruptions. Upon receiving a timer interrupt, the system invokes the irq_handler.s, which then calls the c_irq_handler function, passing the current task's context as an argument (a pointer to the stack). The c_scheduler function is then executed to determine whether the current task has exceeded its allocated time slice, indicated by comparing current_task.current_ticks with current_task.task_ticks. If the task has not yet reached its time limit, the system returns to the interrupt handler to continue execution. However, if the time limit is reached, the scheduler performs context switching. This involves saving the current task's interrupt stack pointer (irq_sp) from the assembly context, switching to Supervisor (SVC) mode, and saving the SVC stack pointer of the current task. The scheduler then loads the SVC stack pointer of the next task to be executed, switches back to IRQ mode, and finally loads the interrupt stack pointer of the new task. This cycle repeats, ensuring efficient multitasking and responsive task management on the ARMv7 architecture. 
+
+<style>
+div.mermaid {
+    text-align: center;
+}
+</style>
+
+<div class="mermaid">
+
+```mermaid
+flowchart TD
+    1["Task x running"] --> 2{"Timer interruption"}
+    2 -- No --> 1
+    2 -- Yes --> A
+    A["irq_handler.s"] --> B["c_irq_handler"]
+    B -- Pass the task's context as argument (a pointer to the stack)--> C["c_scheduler"]
+    C --> D{"current_task.current_ticks >= current_task.task_ticks"}
+    D -- No --> A
+    D -- Yes --> E["Perform the Context Switching"]
+    E --> F["save the current task's irq_sp that comes from the assembly ctx"]
+    F --> G["change to SVC mode"]
+    G --> H["save the svc_sp of the current task"]
+    H --> I["load the svc_sp of the new task"]
+    I --> J["change to IRQ mode"]
+    J --> K["load the irq_sp of the new task"]
+    K --> A
+```
+
+</div>
+
+
+> [!IMPORTANT]
+> There is a bug when printing inside the tasks, which seems to be a stack overflow problem. This issue requires further investigation and debugging to ensure the stability and reliability of the scheduler implementation.
+
+
+## Resources
+- [CPU Scheduling Basics - YouTube](https://www.youtube.com/watch?v=Jkmy2YLUbUY)
+- [baremetal-arm/doc/08_scheduling.md at 09-wip · umanovskis/baremetal-arm · GitHub](https://github.com/umanovskis/baremetal-arm/blob/09-wip/doc/08_scheduling.md)
+
+# What and Why Nix?
+
+Nix is a powerful package manager for Linux and other Unix systems that makes package management reliable and reproducible. It aims to provide a robust and simple way to handle packages and their dependencies, ensuring that the same package setup can be replicated across multiple environments without any inconsistencies.
+
+The key features of Nix are:
+
+1. **Reproducibility:** Nix ensures that installing or upgrading one package cannot break other packages. It allows multiple versions of a package to coexist on the same system.
+
+2. **Isolation:** Nix isolates packages from each other. This means that unlike traditional package managers, it doesn't have global state that can be mutated by packages.
+
+These features make Nix an excellent tool for creating reproducible development environments, reducing the "it works on my machine" problem.
+
+- [Nix Tutorial](https://nix.dev/tutorials/)
+- [A step towards the future of configuration and infrastructure management with Nix](https://blog.container-solutions.com/step-towards-future-configuration-infrastructure-management-nix)
+- [Is there much difference between using nix-shell and docker for local development? - Help - NixOS Discourse](https://discourse.nixos.org/t/is-there-much-difference-between-using-nix-shell-and-docker-for-local-development/807)
+- [What is /usr/bin/env?](https://stackoverflow.com/questions/43793040/how-does-usr-bin-env-work-in-a-linux-shebang-line)
+- [Nix + Make](https://www.reddit.com/r/NixOS/comments/8hefx5/nixshell_as_interpreter_for_a_makefile/)
 
 # References
 
@@ -122,7 +192,14 @@ Exceptions take into account the interrupts (`IRQs`): [Guide for ARMv7-A | Types
 ### Videos
 
 - [Introduction to Assembly Programming with ARM - Setting up Qemu for ARM - YouTube](https://www.youtube.com/watch?v=WubAuz4hPpY)
+- [X86 Needs To Die - YouTube](https://www.youtube.com/watch?v=xCBrtopAG80)
 
 ### Online Emulator
 
 - [CPUlator ARMv7 System Simulator](https://cpulator.01xz.net/?sys=arm)
+
+
+### GDB extras
+
+- [c - How do I show what fields a struct has in GDB? - Stack Overflow](https://stackoverflow.com/questions/1768620/how-do-i-show-what-fields-a-struct-has-in-gdb/42320040#42320040)
+- [Debugging with GDB - Examining Data](https://web.mit.edu/gnu/doc/html/gdb_10.html)

@@ -37,4 +37,6 @@ typedef volatile struct {
   uint32_t PCellID[4];
 } _timer_t;
 
+void c_timer_init();
+
 #endif // __TIMER_LIB_H

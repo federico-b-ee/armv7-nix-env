@@ -3,6 +3,7 @@
 .extern c_puts
 .extern c_putchar
 .extern c_puts_hex
+.extern c_run_entrypoint
 
 .section .text._irq_handler
 
@@ -18,12 +19,12 @@ _irq_handler:
 
     mov r0, sp
     bl c_irq_handler
+    mov sp, r0
 
     pop {r7, r8}
     mov sp, r7
     msr spsr, r8
     ldmfd sp!, {r0-r12, pc}^
-    subs pc, lr, #4
 
 .section .data
 msg:

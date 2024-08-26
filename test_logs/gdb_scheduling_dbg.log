@@ -1,0 +1,144 @@
+Remote connection closed
+Breakpoint 1 at 0x70010908: file kernel/sched.c, line 118.
+Continuing.
+
+Breakpoint 1, c_scheduler (ctx=0x700247c4) at kernel/sched.c:118
+118	    c_puts("\nEND -- Task Switch\n");
+$1 = {
+  svc_sp = 0x70023c00,
+  irq_sp = 0x70024bc4,
+  id = 1 '\001',
+  entrypoint = 0x7001094c <task1>,
+  task_ticks = 3,
+  current_ticks = 0
+}
+$2 = {
+  svc_sp = 0x70022be0,
+  irq_sp = 0x700247cc,
+  id = 0 '\000',
+  entrypoint = 0x70010930 <task_idle>,
+  task_ticks = 5,
+  current_ticks = 0
+}
+$3 = {
+  svc_sp = 0x70023c00,
+  irq_sp = 0x70024bc4,
+  id = 1 '\001',
+  entrypoint = 0x7001094c <task1>,
+  task_ticks = 3,
+  current_ticks = 0
+}
+$4 = {
+  svc_sp = 0x70024000,
+  irq_sp = 0x70024fc4,
+  id = 2 '\002',
+  entrypoint = 0x70010a50 <task2>,
+  task_ticks = 3,
+  current_ticks = 0
+}
+$5 = {
+  svc_sp = 0x70024400,
+  irq_sp = 0x700253c4,
+  id = 3 '\003',
+  entrypoint = 0x70010b5c <task3>,
+  task_ticks = 3,
+  current_ticks = 0
+}
+Remote connection closed
+Breakpoint 1 at 0x700107d4: file kernel/sched.c, line 88.
+Breakpoint 2 at 0x70010908: file kernel/sched.c, line 118.
+Continuing.
+
+Breakpoint 1, c_scheduler_init () at kernel/sched.c:88
+88	  asm volatile("cpsie i");
+$1 = {
+  svc_sp = 0x70023800,
+  irq_sp = 0x700247c4,
+  id = 0 '\000',
+  entrypoint = 0x70010930 <task_idle>,
+  task_ticks = 5,
+  current_ticks = 0
+}
+$2 = {
+  svc_sp = 0x70023c00,
+  irq_sp = 0x70024bc4,
+  id = 1 '\001',
+  entrypoint = 0x7001094c <task1>,
+  task_ticks = 3,
+  current_ticks = 0
+}
+$3 = {
+  svc_sp = 0x70024000,
+  irq_sp = 0x70024fc4,
+  id = 2 '\002',
+  entrypoint = 0x70010a50 <task2>,
+  task_ticks = 3,
+  current_ticks = 0
+}
+$4 = {
+  svc_sp = 0x70024400,
+  irq_sp = 0x700253c4,
+  id = 3 '\003',
+  entrypoint = 0x70010b5c <task3>,
+  task_ticks = 3,
+  current_ticks = 0
+}
+$5 = {0x70024800, 0x70024c00, 0x70025000, 0x70025400}
+$6 = {0x70023800, 0x70023c00, 0x70024000, 0x70024400}
+Continuing.
+
+Breakpoint 2, c_scheduler (ctx=0x700247c4) at kernel/sched.c:118
+118	    c_puts("\nEND -- Task Switch\n");
+$7 = {
+  svc_sp = 0x70023c00,
+  irq_sp = 0x70024bc4,
+  id = 1 '\001',
+  entrypoint = 0x7001094c <task1>,
+  task_ticks = 3,
+  current_ticks = 0
+}
+Continuing.
+
+Breakpoint 2, c_scheduler (ctx=0x70024bc4) at kernel/sched.c:118
+118	    c_puts("\nEND -- Task Switch\n");
+$8 = {
+  svc_sp = 0x70024000,
+  irq_sp = 0x70024fc4,
+  id = 2 '\002',
+  entrypoint = 0x70010a50 <task2>,
+  task_ticks = 3,
+  current_ticks = 0
+}
+$9 = {
+  svc_sp = 0x70024000,
+  irq_sp = 0x70024fc4,
+  id = 2 '\002',
+  entrypoint = 0x70010a50 <task2>,
+  task_ticks = 3,
+  current_ticks = 0
+}
+Continuing.
+
+Breakpoint 2, c_scheduler (ctx=0x70024fc4) at kernel/sched.c:118
+118	    c_puts("\nEND -- Task Switch\n");
+$10 = {
+  svc_sp = 0x70024400,
+  irq_sp = 0x700253c4,
+  id = 3 '\003',
+  entrypoint = 0x70010b5c <task3>,
+  task_ticks = 3,
+  current_ticks = 0
+}
+Continuing.
+
+Breakpoint 2, c_scheduler (ctx=0x700253c4) at kernel/sched.c:118
+118	    c_puts("\nEND -- Task Switch\n");
+$11 = {
+  svc_sp = 0x70022be0,
+  irq_sp = 0x700247cc,
+  id = 0 '\000',
+  entrypoint = 0x70010930 <task_idle>,
+  task_ticks = 5,
+  current_ticks = 0
+}
+
